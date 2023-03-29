@@ -8,6 +8,7 @@ import { UIKitViewSubmitInteractionContext } from "@rocket.chat/apps-engine/defi
 import { BotpressDemoApp } from "../BotpressDemoApp";
 import { ActionId } from "../enums/actionId";
 import { BlockId } from "../enums/blockId";
+import { createBot } from "../persistence/persistence";
 
 export class ExecuteViewSubmitHandler {
     constructor(
@@ -31,14 +32,17 @@ export class ExecuteViewSubmitHandler {
                     const user =
                         view.state?.[BlockId.INPUT]?.[ActionId.USERNAME];
                     console.log(view.state);
-                    if (await this.read.getUserReader().getByUsername(user)) {
+                    if (
+                        !(await this.read.getUserReader().getByUsername(user))
+                    ) {
                         console.log("User does not exist");
                         // return;
                     }
-                    console.log(await this.read.getUserReader().getByUsername(user));
-
+                    await createBot(this.persistence,botname, botId, user, botalias);
                     break;
             }
-        } catch (e) {}
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
