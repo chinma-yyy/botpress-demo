@@ -10,6 +10,7 @@ import {
 export async function createBot(
     persistence: IPersistence,
     botname: string,
+    description: string,
     botid: string,
     username: string,
     botalias: string
@@ -19,6 +20,7 @@ export async function createBot(
 
     const bot = {
         botname: botname,
+        description: description,
         botid: botid,
         botalias: botalias,
         username: username,
@@ -36,5 +38,3 @@ export async function readbot(persistence: IPersistenceRead) {
 
     return result;
 }
-
-

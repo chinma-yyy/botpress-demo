@@ -29,6 +29,15 @@ export async function botconfigmodal(
     });
     block.addInputBlock({
         blockId: BlockId.INPUT,
+        label: block.newPlainTextObject("Description"),
+        element: block.newPlainTextInputElement({
+            actionId: ActionId.DESCRIPTION,
+            multiline:!0,
+            placeholder: block.newPlainTextObject("Description"),
+        }),
+    });
+    block.addInputBlock({
+        blockId: BlockId.INPUT,
         label: block.newPlainTextObject("Rocket chat user name"),
         element: block.newPlainTextInputElement({
             actionId: ActionId.USERNAME,

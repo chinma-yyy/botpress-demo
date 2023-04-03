@@ -14,7 +14,7 @@ import { botMessage } from "../modals/message";
 import { createBot, readbot } from "../persistence/persistence";
 
 export class Botpresscommand implements ISlashCommand {
-    public constructor(private readonly app: BotpressDemoApp) {}
+    public constructor(private readonly app: BotpressDemoApp) { }
     public command: string = "botpress";
     public i18nParamsExample: string = "Params_example";
     public i18nDescription: string =
@@ -49,19 +49,24 @@ export class Botpresscommand implements ISlashCommand {
                 console.log("After opening?");
                 break;
 
-            case "update":
-                console.log("update");
-                await botMessage(modify, context.getRoom());
-                break;
 
             case "list":
                 console.log("list");
                 const bot = await readbot(read.getPersistenceReader());
+                if(bot.length==0){
+                    const zero=modify.getCreator().startMessage().setText("No bots configures").setRoom(context.getRoom());
+                    modify.getCreator().finish(zero);
+                    return;
+                }
+                await botMessage(
+                    modify,
+                    context.getRoom(),
+                    bot,
+                    context.getSender().username,
+                    read
+                );
                 console.log(bot);
                 console.log("One element");
-                console.log(bot[0]?.["botname"]);
-                console.log(bot[0]?.["botid"]);
-
                 break;
 
             default:

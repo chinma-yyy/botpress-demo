@@ -3,5 +3,6 @@ export enum ActionId {
     BOTALIAS = "botalias",
     BOTID = "botid",
     USERNAME = "username",
-    SUBMIT='submit'
+    SUBMIT='submit',
+    DESCRIPTION='desc'
 }

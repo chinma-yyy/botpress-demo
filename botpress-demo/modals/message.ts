@@ -1,4 +1,4 @@
-import { IModify } from "@rocket.chat/apps-engine/definition/accessors";
+import { IModify, IRead } from "@rocket.chat/apps-engine/definition/accessors";
 import {
     IMessageAttachment,
     MessageActionButtonsAlignment,
@@ -9,29 +9,35 @@ import { IRoom } from "@rocket.chat/apps-engine/definition/rooms";
 export async function botMessage(
     modify: IModify,
     room: IRoom,
-    data?: Array<object>
+    data: Array<object>,
+    user: string,
+    read: IRead
 ) {
-    const block = modify.getCreator().getBlockBuilder();
+    console.log(room);
+    console.log("room");
     const message = modify.getCreator().startMessage().setRoom(room);
-    let attachments: Array<IMessageAttachment> = [
-        {
+    let attachments: Array<IMessageAttachment> = [];
+    let attachment: IMessageAttachment;
+
+    data?.forEach((element, index) => {
+        attachment = {
             thumbnailUrl:
-                "https://avatars.githubusercontent.com/u/112387862?v=4",
-            description: "Sample description",
-            text: `## Bot Title
-            \nBot Description`,
+                `https://avatars.githubusercontent.com/u/112387862?v=4`,
+            description: `${element?.["description"]}`,
+            text: `## ${element?.["botalias"]} ${index}
+            \n${element?.["description"]}`,
             actionButtonsAlignment: MessageActionButtonsAlignment.HORIZONTAL,
             actions: [
                 {
                     type: MessageActionType.BUTTON,
-                    text: "Button1",
-                    msg: "Button1 action",
+                    text: "Create bot",
+                    msg: "/botpress create",
                     msg_in_chat_window: true,
                 },
                 {
                     type: MessageActionType.BUTTON,
-                    text: "Button2",
-                    msg: "Button2 action",
+                    text: "Delete bot",
+                    msg: "Command to delete",
                     msg_in_chat_window: true,
                 },
                 {
@@ -41,11 +47,12 @@ export async function botMessage(
                     msg_in_chat_window: true,
                 },
             ],
-        },
-    ];
+        };
+        attachments.push(attachment);
+
+    })
     message.setAttachments(attachments);
-    modify.getCreator().finish(message);
-    // data.forEach((element, index) => {
-    //     console.log(element);
-    // });
-}
+    await modify.getCreator().finish(message);
+    console.log("bot liring");
+};
+
